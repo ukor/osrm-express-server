@@ -1,16 +1,20 @@
 const helmet = require('helmet');
 const { loadMapGraph } = require('./bin/osrm');
+const OSRMroute = require('./shared/route');
+const OSRMtable = require('./shared/table');
+const health = require('./shared/health');
 
 function configureMiddlewares(app) {
   app.use(helmet());
 }
 
 function configureRoutes(profile, app){
-    app.use('/', (request, response) => {
-        response.send(`${profile} Profile is recieving the request`);
-    });
-    app.use('./shared/route', route);
-    app.use("./shared/table", table);
+    app.use('/route', OSRMroute);
+    app.use('/table', OSRMtable);
+    app.use('/health', (request, response, next) => {
+        app.set('osrmProfile', profile);
+        next();
+    }, health);
 }
 
 function configureOSRM(app, options){
