@@ -10,6 +10,7 @@ function configureRoutes(profile, app){
         response.send(`${profile} Profile is recieving the request`);
     });
     app.use('./shared/route', route);
+    app.use("./shared/table", table);
 }
 
 function configureOSRM(app, options){
