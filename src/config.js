@@ -9,6 +9,7 @@ function configureRoutes(profile, app){
     app.use('/', (request, response) => {
         response.send(`${profile} Profile is recieving the request`);
     });
+    app.use('./shared/route', route);
 }
 
 function configureOSRM(app, options){
