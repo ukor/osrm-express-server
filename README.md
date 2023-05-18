@@ -42,6 +42,7 @@ sources and save the result in the home folder folder `data/`
 
     curl --create-dirs --output ~/osrm_data/<name-of-file>.osm.pbf http://download.geofabrik.de/europe-latest.osm.pbf
 
+The `.osm.pbf` file will be downloaded to `~/osrm_data/<name-of-file>.osm.pbf` 
 
 
 ### Create a routable graph
@@ -50,11 +51,13 @@ Once we have our dataset, we can pass it to the OSRM container to create a routa
 with the contraction hierachies algorithm:
 
     # extract the network and create the osrm file(s)
-    docker run -it -v $(pwd)/data:/data osrm/osrm-backend:v5.24.1 osrm-extract -p /opt/car.lua /data/osrm/example-areas/example-areas.osm.pbf
-
+    ```
+    docker run -it -v ~/osrm_data/<name-of-file>.osm.pbf:/data osrm/osrm-backend:v5.24.1 osrm-extract -p /opt/car.lua /data/osrm/example-areas/example-areas.osm.pbf
+    ```
     # create the graph
+    ```
     docker run -it -v $(pwd)/data:/data osrm/osrm-backend:v5.24.1 osrm-contract /data/osrm/example-areas/example-areas.osrm
-
+    ```
 The dataset is now available at `./data/osrm/example-areas` and can be used by any OSRM instance running the same version.
 
 ## Starting the server
@@ -62,7 +65,9 @@ The dataset is now available at `./data/osrm/example-areas` and can be used by a
 In order to launch the application with the specified dataset (see above), run
 the container with the required environment variables, port mapping and volume bindings:
 
+    ```
     docker run --env-file .env -d -p 6000:6000 -p 6100:6100 -p 6200:6200 -v $(pwd)/data:/data osrm-express-server
+    ```
 
 After the application has loaded the graph in memory, you can make requests to the server running at:
 
