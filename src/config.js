@@ -18,7 +18,7 @@ function configureRoutes(profile, app){
 }
 
 function configureOSRM(app, options){
-    loadMapGraph(options)
+    const osrm = loadMapGraph(options);
     app.set("osrm", osrm);
 }
 
