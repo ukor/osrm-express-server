@@ -52,16 +52,45 @@ with the contraction hierachies algorithm:
 
     # extract the network and create the osrm file(s)
     ```
-    docker run -it -v ~/osrm_data/<name-of-file>.osm.pbf:/data osrm/osrm-backend:v5.24.1 osrm-extract -p /opt/car.lua /data/osrm/example-areas/example-areas.osm.pbf
+    docker run -it -v ~/osrm_data/<name-of-file>.osm.pbf:/data osrm/osrm-backend:v5.24.0 osrm-extract -p /opt/car.lua /data/<name-of-file>.osm.pbf
     ```
     # create the graph
     ```
-    docker run -it -v $(pwd)/data:/data osrm/osrm-backend:v5.24.1 osrm-contract /data/osrm/example-areas/example-areas.osrm
+    docker run -it -v $(pwd)/data:/data osrm/osrm-backend:v5.24.0 osrm-contract /data/<name-of-file>.osrm
     ```
 The dataset is now available at `./data/osrm/example-areas` and can be used by any OSRM instance running the same version.
 
-## Starting the server
+#Examples
 
+- Car
+```
+docker run -it -v /home/ubuntu/osrm_data/car:/data/car osrm/osrm-backend:v5.24.0 osrm-extract -p /opt/car.lua /data/car/greater-london.osm.pbf
+```
+
+```
+docker run -it -v /home/ubuntu/osrm_data/car:/data/car osrm/osrm-backend:v5.24.0 osrm-contract /data/car/greater-london.osrm
+```
+
+- Bicycle
+```
+docker run -it -v /home/ubuntu/osrm_data/bike:/data/bike osrm/osrm-backend:v5.24.0 osrm-extract -p /opt/bicycle.lua /data/bike/greater-london.osm.pbf
+```
+
+```
+docker run -it -v /home/ubuntu/osrm_data/bike:/data/bike osrm/osrm-backend:v5.24.0 osrm-contract /data/bike/greater-london.osrm
+```
+- Foot
+```
+docker run -it -v /home/ubuntu/osrm_data/foot:/data/foot osrm/osrm-backend:v5.24.0 osrm-extract -p /opt/foot.lua /data/foot/greater-london.osm.pbf
+```
+
+```
+docker run -it -v /home/ubuntu/osrm_data/foot:/data/foot osrm/osrm-backend:v5.24.0 osrm-contract /data/foot/greater-london.osrm
+```
+## Starting the server
+Update the `.env` file content before stating the application. See `.env.example` for reference.
+
+- Docker
 In order to launch the application with the specified dataset (see above), run
 the container with the required environment variables, port mapping and volume bindings:
 
@@ -70,6 +99,20 @@ the container with the required environment variables, port mapping and volume b
     ```
 
 After the application has loaded the graph in memory, you can make requests to the server running at:
+
+- PM2
+See https://pm2.keymetrics.io/docs/usage/quick-start/ for PM2 installation instructions
+
+To start the application with PM2, run the following command
+
+```sh
+pm2 start src/main.js --watch --name osrm-express-server
+```
+
+To reload the application
+```sh
+pm2 reload src/main.js --watch --name osrm-express-server
+```
 
 - Drive [http://localhost:6000](http://localhost:6000)
 - Bike [http://localhost:6100](http://localhost:6100)
