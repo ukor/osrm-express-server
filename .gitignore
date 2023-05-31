@@ -1,2 +1,6 @@
 node_modules/
 .env
+
+osrm-data/car/
+osrm-data/bike/
+osrm-data/foot/
